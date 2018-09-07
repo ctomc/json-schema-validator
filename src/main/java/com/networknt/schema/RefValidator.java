@@ -90,8 +90,10 @@ public class RefValidator extends BaseJsonValidator implements JsonValidator {
     
     private static String obtainAbsolutePath(JsonSchema parentSchema, String schemaUrl) {
     	String baseSchemaUrl = parentSchema.findAncestor().getSchemaNode().get("id").textValue();
-		int index = baseSchemaUrl.lastIndexOf("/");
-		baseSchemaUrl = baseSchemaUrl.substring(0, index);
+		if (baseSchemaUrl.contains("/")) {
+            int index = baseSchemaUrl.lastIndexOf("/");
+            baseSchemaUrl = baseSchemaUrl.substring(0, index);
+        }
 		
 		String schemaRef = schemaUrl;
 		
@@ -106,8 +108,6 @@ public class RefValidator extends BaseJsonValidator implements JsonValidator {
 		}else if(schemaRef.startsWith(REF_RELATIVE)){
 			// relative from schema
 			while(schemaRef.startsWith(REF_RELATIVE)){
-				index = baseSchemaUrl.lastIndexOf("/");
-				baseSchemaUrl = baseSchemaUrl.substring(0, index);
 				schemaRef = schemaRef.replaceFirst(REF_RELATIVE, "");
 			}
 		}
